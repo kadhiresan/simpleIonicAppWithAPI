@@ -1,9 +1,16 @@
 angular.module('starter.controllers', [])
 
 .controller('PeopleCtrl', function($scope, Peoples){
-   Peoples.get(function (data) {
-      $scope.peopleList = data.results;
+    Peoples.get(function (data) {
+        $scope.peopleList = data.results;
     });
+    
+    $scope.doRefresh = function() {
+        Peoples.get(function (data) {
+            $scope.peopleList = data.results;
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+    };
     
 })
 
