@@ -1,24 +1,33 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
-
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
+.controller('PeopleCtrl', function($scope, Peoples){
+   Peoples.get(function (data) {
+      $scope.peopleList = data.results;
+    });
+    
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+.controller('PlanetsCtrl', function($scope, Planets) {
+  Planets.get(function(data){
+    var p =  data.results;
+    var x = [];
+    for (var i = 0; i < p.length; i++) {
+      var item = p[i];
+      (function(item, i){
+        item.id = function(){
+          return i+2
+        }
+        x.push(item);
+      })(item, i)
+    }
+    $scope.planets = x;
+  })
+})
+
+.controller('PlanetDetailCtrl', function($scope, $stateParams, Planets) {
+  Planets.getPlanetDetails($stateParams.planetId, function(planet){
+    $scope.planet = planet;
+  });
 })
 
 .controller('AccountCtrl', function($scope) {
